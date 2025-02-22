@@ -75,4 +75,9 @@ def main():
         execute_trade(action, symbol, quantity)
         time.sleep(86400)  # Run once per day
 
+# proegram execution:
+if __name__ == "__main__":
+     main()
+
+
 
