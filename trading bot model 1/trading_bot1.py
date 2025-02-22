@@ -34,4 +34,45 @@ def get_moving_averages(symbol, short_window, long_window):
     data['long_mavg'] = data['close'].rolling(window=long_window).mean()
 
     return data
+# function to check the signals for buying:
+def check_buy_sell_signals(data):
+    if data['short_mavg'].iloc[-1] > data['long_mavg'].iloc[-1] and \
+       data['short_mavg'].iloc[-2] <= data['long_mavg'].iloc[-2]:
+        return 'buy'
+    elif data['short_mavg'].iloc[-1] < data['long_mavg'].iloc[-1] and \
+         data['short_mavg'].iloc[-2] >= data['long_mavg'].iloc[-2]:
+        return 'sell'
+    else:
+        return 'hold'
+    
+# function to self execute a trade
+def exeute_trade(action, symbol, quantity):
+    if action == 'buy':
+        api.submit_order(
+            symbol=symbol,
+            qty=quantity,
+            side='buy',
+            type='market',
+            time_in_force='gtc'
+        )
+        print(f"Bought {quantity} shares of {symbol}")
+    elif action == 'sell':
+        api.submit_order(
+            symbol=symbol,
+            qty=quantity,
+            side='sell',
+            type='market',
+            time_in_force='gtc'
+        )
+        print(f"Sold {quantity} shares of {symbol}")
+
+# main execution function:
+def main():
+    while True:
+        e True:
+        data = get_moving_averages(symbol, short_window, long_window)
+        action = check_buy_sell_signals(data)
+        execute_trade(action, symbol, quantity)
+        time.sleep(86400)  # Run once per day
+
 
